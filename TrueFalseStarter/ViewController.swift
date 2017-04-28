@@ -12,19 +12,25 @@ import AudioToolbox
 
 class ViewController: UIViewController {
     
-    let questionsPerRound = 4
+    //MARK: Properties
+    @IBOutlet weak var questionField: UILabel!
+    @IBOutlet weak var resultsLabel: UILabel!
+    @IBOutlet weak var option1Button: UIButton!
+    @IBOutlet weak var option2Button: UIButton!
+    @IBOutlet weak var option3Button: UIButton!
+    @IBOutlet weak var option4Button: UIButton!
+    @IBOutlet weak var nextQuestionButton: UIButton!
+    
+    let questionsPerRound = 10
     var questionsAsked = 0
     var correctQuestions = 0
     var indexOfSelectedQuestion: Int = 0
+    var indexOfQuestionsAsked = [Int]()
     
     var gameSound: SystemSoundID = 0
     
-    let quizQuestions = QuizQuestions() 
+    let quizQuestions = QuizQuestions()
     
-    @IBOutlet weak var questionField: UILabel!
-    @IBOutlet weak var trueButton: UIButton!
-    @IBOutlet weak var falseButton: UIButton!
-    @IBOutlet weak var playAgainButton: UIButton!
     
 
     override func viewDidLoad() {
@@ -40,22 +46,51 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    
+    
+    //MARK: Functions
     func displayQuestion() {
+        getQuestion()
+//        indexOfSelectedQuestion = GKRandomSource.sharedRandom().nextInt(upperBound: quizQuestions.trivia.count)
+//        let questionDictionary = quizQuestions.trivia[indexOfSelectedQuestion]
+//        questionField.text = questionDictionary["Question"]
+//        option1Button.setTitle(questionDictionary["Option1"], for: .normal)
+//        option2Button.setTitle(questionDictionary["Option2"], for: .normal)
+//        option3Button.setTitle(questionDictionary["Option3"], for: .normal)
+//        option4Button.setTitle(questionDictionary["Option4"], for: .normal)
+//        nextQuestionButton.isHidden = true
+    }
+    
+    func getQuestion() {
         indexOfSelectedQuestion = GKRandomSource.sharedRandom().nextInt(upperBound: quizQuestions.trivia.count)
+        if [indexOfSelectedQuestion] == indexOfQuestionsAsked {
+            while [indexOfSelectedQuestion] == indexOfQuestionsAsked {
+                indexOfSelectedQuestion = GKRandomSource.sharedRandom().nextInt(upperBound: quizQuestions.trivia.count)
+            }
+        }
         let questionDictionary = quizQuestions.trivia[indexOfSelectedQuestion]
+        indexOfQuestionsAsked += [indexOfSelectedQuestion]
         questionField.text = questionDictionary["Question"]
-        playAgainButton.isHidden = true
+        option1Button.setTitle(questionDictionary["Option1"], for: .normal)
+        option2Button.setTitle(questionDictionary["Option2"], for: .normal)
+        option3Button.setTitle(questionDictionary["Option3"], for: .normal)
+        option4Button.setTitle(questionDictionary["Option4"], for: .normal)
+        nextQuestionButton.isHidden = true
+        
     }
     
     func displayScore() {
         // Hide the answer buttons
-        trueButton.isHidden = true
-        falseButton.isHidden = true
+        option1Button.isHidden = true
+        option2Button.isHidden = true
+        option3Button.isHidden = true
+        option4Button.isHidden = true
+        questionField.isHidden = true
         
         // Display play again button
-        playAgainButton.isHidden = false
+        nextQuestionButton.isHidden = false
         
-        questionField.text = "Way to go!\nYou got \(correctQuestions) out of \(questionsPerRound) correct!"
+        resultsLabel.text = "You got \(correctQuestions) out of \(questionsPerRound) correct!"
         
     }
     
@@ -66,7 +101,7 @@ class ViewController: UIViewController {
         let selectedQuestionDict = quizQuestions.trivia[indexOfSelectedQuestion]
         let correctAnswer = selectedQuestionDict["Answer"]
         
-        if (sender === trueButton &&  correctAnswer == "True") || (sender === falseButton && correctAnswer == "False") {
+        if (sender === option1Button &&  correctAnswer == option1Button.currentTitle) || (sender === option2Button && correctAnswer == option2Button.currentTitle) {
             correctQuestions += 1
             questionField.text = "Correct!"
         } else {
@@ -88,8 +123,10 @@ class ViewController: UIViewController {
     
     @IBAction func playAgain() {
         // Show the answer buttons
-        trueButton.isHidden = false
-        falseButton.isHidden = false
+        option1Button.isHidden = false
+        option2Button.isHidden = false
+        option3Button.isHidden = false
+        option4Button.isHidden = false
         
         questionsAsked = 0
         correctQuestions = 0
@@ -99,7 +136,6 @@ class ViewController: UIViewController {
 
     
     // MARK: Helper Methods
-    
     func loadNextRoundWithDelay(seconds: Int) {
         // Converts a delay in seconds to nanoseconds as signed 64 bit integer
         let delay = Int64(NSEC_PER_SEC * UInt64(seconds))
