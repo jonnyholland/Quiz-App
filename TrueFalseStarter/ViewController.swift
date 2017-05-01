@@ -62,14 +62,24 @@ class ViewController: UIViewController {
     }
     
     func getQuestion() {
+        // Hide the results label
+        resultsLabel.isHidden = true
+        // Make sure options are visible
+        option1Button.isHidden = false
+        option2Button.isHidden = false
+        option3Button.isHidden = false
+        option4Button.isHidden = false
+        // Get the initial random number
         indexOfSelectedQuestion = GKRandomSource.sharedRandom().nextInt(upperBound: quizQuestions.trivia.count)
-        if [indexOfSelectedQuestion] == indexOfQuestionsAsked {
-            while [indexOfSelectedQuestion] == indexOfQuestionsAsked {
-                indexOfSelectedQuestion = GKRandomSource.sharedRandom().nextInt(upperBound: quizQuestions.trivia.count)
-            }
+        // Loop to make sure we don't use this same number
+        while indexOfQuestionsAsked.contains(indexOfSelectedQuestion) {
+            indexOfSelectedQuestion = GKRandomSource.sharedRandom().nextInt(upperBound: quizQuestions.trivia.count)
         }
+        // After passing the loop, assigning to a temp constant
         let questionDictionary = quizQuestions.trivia[indexOfSelectedQuestion]
-        indexOfQuestionsAsked += [indexOfSelectedQuestion]
+        // Appending to array to make sure we don't use this number again
+        indexOfQuestionsAsked.append(indexOfSelectedQuestion)
+        // Putting text in the boxes
         questionField.text = questionDictionary["Question"]
         option1Button.setTitle(questionDictionary["Option1"], for: .normal)
         option2Button.setTitle(questionDictionary["Option2"], for: .normal)
@@ -101,13 +111,26 @@ class ViewController: UIViewController {
         let selectedQuestionDict = quizQuestions.trivia[indexOfSelectedQuestion]
         let correctAnswer = selectedQuestionDict["Answer"]
         
-        if (sender === option1Button &&  correctAnswer == option1Button.currentTitle) || (sender === option2Button && correctAnswer == option2Button.currentTitle) {
+        if (sender === option1Button && correctAnswer == option1Button.currentTitle) || (sender === option2Button && correctAnswer == option2Button.currentTitle) || (sender === option3Button && correctAnswer == option3Button.currentTitle) || (sender === option4Button && correctAnswer == option4Button.currentTitle) {
             correctQuestions += 1
-            questionField.text = "Correct!"
+            resultsLabel.text = "Correct!"
+            resultsLabel.isHidden = false
         } else {
-            questionField.text = "Sorry, wrong answer!"
+            resultsLabel.text = "Sorry, wrong answer!"
+            resultsLabel.isHidden = false
         }
-        
+        if option1Button != sender {
+            option1Button.isHidden = true
+        }
+        if option2Button != sender {
+            option2Button.isHidden = true
+        }
+        if option3Button != sender {
+            option3Button.isHidden = true
+        }
+        if option4Button != sender {
+            option4Button.isHidden = true
+        }
         loadNextRoundWithDelay(seconds: 2)
     }
     
