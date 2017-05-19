@@ -20,7 +20,7 @@ struct QuizQuestions {
         ["Question": "Which of the following rivers is longest?", "Answer": "Mississippi", "Option1": "Yangtze", "Option2": "Mississippi", "Option3": "Congo", "Option4": "Mekong"  ],
         ["Question": "Which city is the oldest?", "Answer": "Mexico City", "Option1": "Mexico City", "Option2": "Cape Town", "Option3": "San Juan", "Option4": "Sydney"],
         ["Question": "Which country was the first to allow women to vote in national elections?", "Answer": "Poland", "Option1": "Poland", "Option2": "United States", "Option3": "Sweden", "Option4": "Senegal"],
-        ["Question": "Which of these countries won the most medals in the 2012 Summer Games?", "Answer": "Great Britian", "Option1": "France", "Option2": "Germany", "Option3": "Japan", "Option4": "Great Britain"]
+        ["Question": "Which of these countries won the most medals in the 2012 Summer Games?", "Answer": "Great Britain", "Option1": "France", "Option2": "Germany", "Option3": "Japan", "Option4": "Great Britain"]
     ]
     
 }

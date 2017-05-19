@@ -26,6 +26,9 @@ class ViewController: UIViewController {
     var correctQuestions = 0
     var indexOfSelectedQuestion: Int = 0
     var indexOfQuestionsAsked = [Int]()
+    let buttonBlue = UIColor(red: 12/255, green: 121/255, blue: 150/255, alpha: 1)
+    let buttonGreen = UIColor(red: 0/255, green: 147/255, blue: 135/255, alpha: 1)
+    let buttonRed = UIColor(red: 153/255, green: 29/255, blue: 50/255, alpha: 1)
     
     var gameSound: SystemSoundID = 0
     
@@ -35,9 +38,9 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadGameStartSound()
-        // Start game
-        playGameStartSound()
+//        loadGameStartSound()
+//        // Start game
+//        playGameStartSound()
         displayQuestion()
     }
 
@@ -51,24 +54,20 @@ class ViewController: UIViewController {
     //MARK: Functions
     func displayQuestion() {
         getQuestion()
-//        indexOfSelectedQuestion = GKRandomSource.sharedRandom().nextInt(upperBound: quizQuestions.trivia.count)
-//        let questionDictionary = quizQuestions.trivia[indexOfSelectedQuestion]
-//        questionField.text = questionDictionary["Question"]
-//        option1Button.setTitle(questionDictionary["Option1"], for: .normal)
-//        option2Button.setTitle(questionDictionary["Option2"], for: .normal)
-//        option3Button.setTitle(questionDictionary["Option3"], for: .normal)
-//        option4Button.setTitle(questionDictionary["Option4"], for: .normal)
-//        nextQuestionButton.isHidden = true
+
     }
     
     func getQuestion() {
+        // Making sure button backgrounds are normal
+        resetButtonBackground(sender1: option1Button, sender2: option2Button, sender3: option3Button, sender4: option4Button)
+        
+        // Reset the Next Question Button
+        nextQuestionButton.setTitle("Next Question", for: .normal)
+        
         // Hide the results label
         resultsLabel.isHidden = true
         // Make sure options are visible
-        option1Button.isHidden = false
-        option2Button.isHidden = false
-        option3Button.isHidden = false
-        option4Button.isHidden = false
+        showState(sender1: option1Button, sender2: option2Button, sender3: option3Button, sender4: option4Button, state: false)
         // Get the initial random number
         indexOfSelectedQuestion = GKRandomSource.sharedRandom().nextInt(upperBound: quizQuestions.trivia.count)
         // Loop to make sure we don't use this same number
@@ -91,49 +90,54 @@ class ViewController: UIViewController {
     
     func displayScore() {
         // Hide the answer buttons
-        option1Button.isHidden = true
-        option2Button.isHidden = true
-        option3Button.isHidden = true
-        option4Button.isHidden = true
-        questionField.isHidden = true
+        showState(sender1: option1Button, sender2: option2Button, sender3: option3Button, sender4: option4Button, state: true)
         
-        // Display play again button
-        nextQuestionButton.isHidden = false
-        
+        // Show the result
         resultsLabel.text = "You got \(correctQuestions) out of \(questionsPerRound) correct!"
         
+        // Reset
+        indexOfQuestionsAsked.removeAll()
+        questionsAsked = 0
+        correctQuestions = 0
+        
+        nextQuestionButton.setTitle("Play Again", for: .normal)
     }
     
-    @IBAction func checkAnswer(_ sender: UIButton) {
-        // Increment the questions asked counter
-        questionsAsked += 1
-        
-        let selectedQuestionDict = quizQuestions.trivia[indexOfSelectedQuestion]
-        let correctAnswer = selectedQuestionDict["Answer"]
-        
-        if (sender === option1Button && correctAnswer == option1Button.currentTitle) || (sender === option2Button && correctAnswer == option2Button.currentTitle) || (sender === option3Button && correctAnswer == option3Button.currentTitle) || (sender === option4Button && correctAnswer == option4Button.currentTitle) {
-            correctQuestions += 1
-            resultsLabel.text = "Correct!"
-            resultsLabel.isHidden = false
-        } else {
-            resultsLabel.text = "Sorry, wrong answer!"
-            resultsLabel.isHidden = false
-        }
-        if option1Button != sender {
-            option1Button.isHidden = true
-        }
-        if option2Button != sender {
-            option2Button.isHidden = true
-        }
-        if option3Button != sender {
-            option3Button.isHidden = true
-        }
-        if option4Button != sender {
-            option4Button.isHidden = true
-        }
-        loadNextRoundWithDelay(seconds: 2)
+    // Func to change the button appearance when it's not selected
+    func changeBackgroundFor(notSender: UIButton) {
+        notSender.alpha = 0.3
+        notSender.tintColor = UIColor.lightText
     }
     
+    // Show or hide the buttons
+    func showState(sender1: UIButton, sender2: UIButton, sender3: UIButton, sender4: UIButton, state: Bool) {
+        sender1.isHidden = state
+        sender2.isHidden = state
+        sender3.isHidden = state
+        sender4.isHidden = state
+    }
+    
+    func resetButtonBackground(sender1: UIButton, sender2: UIButton, sender3: UIButton, sender4: UIButton) {
+        sender1.backgroundColor = buttonBlue
+        sender1.tintColor = UIColor.white
+        sender1.alpha = 1
+        sender2.backgroundColor = buttonBlue
+        sender2.tintColor = UIColor.white
+        sender2.alpha = 1
+        sender3.backgroundColor = buttonBlue
+        sender3.tintColor = UIColor.white
+        sender3.alpha = 1
+        sender4.backgroundColor = buttonBlue
+        sender4.tintColor = UIColor.white
+        sender4.alpha = 1
+    }
+    
+    
+    
+    
+    
+    
+    //MARK: The main func
     func nextRound() {
         if questionsAsked == questionsPerRound {
             // Game is over
@@ -144,16 +148,47 @@ class ViewController: UIViewController {
         }
     }
     
-    @IBAction func playAgain() {
-        // Show the answer buttons
-        option1Button.isHidden = false
-        option2Button.isHidden = false
-        option3Button.isHidden = false
-        option4Button.isHidden = false
-        
-        questionsAsked = 0
-        correctQuestions = 0
+    
+    
+    
+    
+    
+    //MARK: Actions
+    @IBAction func nextQuestion(_ sender: Any) {
         nextRound()
+    }
+    
+    
+    @IBAction func checkAnswer(_ sender: UIButton) {
+        // Increment the questions asked counter
+        questionsAsked += 1
+        
+        let selectedQuestionDict = quizQuestions.trivia[indexOfSelectedQuestion]
+        let correctAnswer = selectedQuestionDict["Answer"]
+        
+        if sender.currentTitle == correctAnswer {
+            correctQuestions += 1
+            resultsLabel.text = "Correct!"
+            resultsLabel.isHidden = false
+            sender.backgroundColor = buttonGreen
+        } else {
+            resultsLabel.text = "Sorry, wrong answer!"
+            resultsLabel.isHidden = false
+            sender.backgroundColor = buttonRed
+        }
+        if option1Button != sender {
+            changeBackgroundFor(notSender: option1Button)
+        }
+        if option2Button != sender {
+            changeBackgroundFor(notSender: option2Button)
+        }
+        if option3Button != sender {
+            changeBackgroundFor(notSender: option3Button)
+        }
+        if option4Button != sender {
+            changeBackgroundFor(notSender: option4Button)
+        }
+        nextQuestionButton.isHidden = false
     }
     
 
