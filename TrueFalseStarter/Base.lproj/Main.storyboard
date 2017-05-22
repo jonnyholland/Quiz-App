@@ -130,6 +130,64 @@
                                     <action selector="checkAnswer:" destination="BYZ-38-t0r" eventType="touchUpInside" id="pHS-se-fli"/>
                                 </connections>
                             </button>
+                            <visualEffectView opaque="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pbx-9M-sis">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="oVE-4V-Afc">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                </view>
+                                <blurEffect style="light"/>
+                            </visualEffectView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KHc-3f-NRa" userLabel="Popup View">
+                                <rect key="frame" x="-264" y="217" width="248" height="135"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cCl-Z1-ch9" userLabel="Normal Mode" customClass="RoundButton" customModule="TrueFalseStarter" customModuleProvider="target">
+                                        <rect key="frame" x="20" y="8" width="208" height="50"/>
+                                        <color key="backgroundColor" red="0.13766212210000001" green="0.35870576749999999" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="sXq-Jr-ncK"/>
+                                        </constraints>
+                                        <state key="normal" title="Normal Mode">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="15"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="normalModeButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="njA-7o-ZUa"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wST-xl-JWG" customClass="RoundButton" customModule="TrueFalseStarter" customModuleProvider="target">
+                                        <rect key="frame" x="20" y="75" width="208" height="50"/>
+                                        <color key="backgroundColor" red="0.9448564403553299" green="0.84585622328290166" blue="0.075987847292847827" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="WL0-nv-ecU"/>
+                                        </constraints>
+                                        <state key="normal" title="Lightning Mode"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="15"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="lightningModeButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="73a-nc-cmA"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="cCl-Z1-ch9" secondAttribute="trailing" constant="20" id="31q-ps-E6X"/>
+                                    <constraint firstAttribute="height" constant="135" id="RmL-Wn-8W9"/>
+                                    <constraint firstItem="cCl-Z1-ch9" firstAttribute="leading" secondItem="KHc-3f-NRa" secondAttribute="leading" constant="20" id="SzI-uC-Opw"/>
+                                    <constraint firstItem="wST-xl-JWG" firstAttribute="leading" secondItem="KHc-3f-NRa" secondAttribute="leading" constant="20" id="bjM-63-sGt"/>
+                                    <constraint firstAttribute="trailing" secondItem="wST-xl-JWG" secondAttribute="trailing" constant="20" id="e9Y-4Z-oot"/>
+                                    <constraint firstItem="cCl-Z1-ch9" firstAttribute="top" secondItem="KHc-3f-NRa" secondAttribute="top" constant="8" id="g8X-Gs-nmP"/>
+                                    <constraint firstAttribute="bottom" secondItem="wST-xl-JWG" secondAttribute="bottom" constant="10" id="rUA-HX-IE7"/>
+                                    <constraint firstAttribute="width" constant="248" id="w93-Tp-JYD"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.031372549019607843" green="0.16862745098039217" blue="0.24313725490196078" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -141,17 +199,24 @@
                             <constraint firstAttribute="trailingMargin" secondItem="AS4-HX-g9f" secondAttribute="trailing" constant="20" id="AId-fC-Q5s"/>
                             <constraint firstItem="Igz-gg-2PA" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="20" id="AOy-A1-2wb"/>
                             <constraint firstItem="J1V-MS-ECi" firstAttribute="top" secondItem="L7j-rc-Clw" secondAttribute="bottom" constant="30" id="F7t-6N-Mcm"/>
+                            <constraint firstItem="pbx-9M-sis" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="G3B-8P-2Og"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Igz-gg-2PA" secondAttribute="trailing" constant="20" id="Hns-Dd-QWe"/>
                             <constraint firstItem="Igz-gg-2PA" firstAttribute="top" secondItem="AS4-HX-g9f" secondAttribute="bottom" constant="30" id="PUw-jb-mZC"/>
                             <constraint firstAttribute="trailingMargin" secondItem="J1V-MS-ECi" secondAttribute="trailing" constant="20" id="PZg-8F-feF"/>
+                            <constraint firstItem="KHc-3f-NRa" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="TMa-V4-OXt"/>
                             <constraint firstAttribute="trailingMargin" secondItem="K17-uy-MvB" secondAttribute="trailing" constant="20" id="TaJ-Kd-gub"/>
                             <constraint firstItem="AS4-HX-g9f" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="20" id="V83-8C-Xs6"/>
+                            <constraint firstItem="pbx-9M-sis" firstAttribute="bottom" secondItem="wfy-db-euE" secondAttribute="top" id="VAm-jD-pud"/>
                             <constraint firstItem="I3V-ih-1Ky" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" id="Voi-p5-MEL"/>
+                            <constraint firstItem="pbx-9M-sis" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="WVK-rq-gqb"/>
                             <constraint firstItem="I3V-ih-1Ky" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="20" id="XVf-ri-czy"/>
+                            <constraint firstItem="pbx-9M-sis" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="ZF9-HU-iNJ"/>
                             <constraint firstItem="K17-uy-MvB" firstAttribute="top" secondItem="22h-cZ-gPd" secondAttribute="bottom" constant="30" id="d94-BF-5nr"/>
                             <constraint firstAttribute="trailingMargin" secondItem="I3V-ih-1Ky" secondAttribute="trailing" constant="20" id="dLB-Z3-3Ix"/>
+                            <constraint firstItem="KHc-3f-NRa" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" constant="-300" id="kNv-hG-fjh"/>
                             <constraint firstItem="22h-cZ-gPd" firstAttribute="top" secondItem="Igz-gg-2PA" secondAttribute="bottom" constant="30" id="lEZ-ui-m8b"/>
                             <constraint firstItem="L7j-rc-Clw" firstAttribute="top" secondItem="I3V-ih-1Ky" secondAttribute="bottom" constant="15" id="oI3-Ak-nfG"/>
+                            <constraint firstItem="KHc-3f-NRa" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="s1E-vQ-CpG"/>
                             <constraint firstItem="K17-uy-MvB" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="20" id="vvQ-EA-sf8"/>
                             <constraint firstAttribute="trailingMargin" secondItem="22h-cZ-gPd" secondAttribute="trailing" constant="20" id="yyJ-wx-zMs"/>
                         </constraints>
@@ -163,13 +228,16 @@
                         <outlet property="option2Button" destination="AS4-HX-g9f" id="G2Q-ls-yf5"/>
                         <outlet property="option3Button" destination="Igz-gg-2PA" id="gyr-ou-n3C"/>
                         <outlet property="option4Button" destination="22h-cZ-gPd" id="7Gv-23-BZF"/>
+                        <outlet property="popupBlurEffect" destination="pbx-9M-sis" id="024-yG-j1P"/>
+                        <outlet property="popupView" destination="KHc-3f-NRa" id="6Xx-Nf-7qj"/>
                         <outlet property="questionField" destination="I3V-ih-1Ky" id="7UI-o2-ATi"/>
                         <outlet property="resultsLabel" destination="L7j-rc-Clw" id="TFW-n6-L0F"/>
+                        <outlet property="selectModePopupConstraint" destination="kNv-hG-fjh" id="3qM-lR-mWH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="141.59999999999999" y="138.98050974512745"/>
+            <point key="canvasLocation" x="140.625" y="138.38028169014083"/>
         </scene>
     </scenes>
 </document>

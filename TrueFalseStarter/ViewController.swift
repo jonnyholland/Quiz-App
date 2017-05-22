@@ -20,12 +20,28 @@ class ViewController: UIViewController {
     @IBOutlet weak var option3Button: UIButton!
     @IBOutlet weak var option4Button: UIButton!
     @IBOutlet weak var nextQuestionButton: UIButton!
+    @IBOutlet weak var selectModePopupConstraint: NSLayoutConstraint!
+    @IBOutlet weak var popupView: UIView!
+    @IBOutlet weak var popupBlurEffect: UIVisualEffectView!
     
+    // Game mode booleans
+    var gameModeSelected = false
+    var lightningModeSelected = false
+    
+    // Lightning Mode
+    var seconds = 15
+    var isTimerRunning = false
+    var timer = Timer()
+    
+    
+    // Quiz properties
     let questionsPerRound = 10
     var questionsAsked = 0
     var correctQuestions = 0
     var indexOfSelectedQuestion: Int = 0
     var indexOfQuestionsAsked = [Int]()
+    
+    // Button colors
     let buttonBlue = UIColor(red: 12/255, green: 121/255, blue: 150/255, alpha: 1)
     let buttonGreen = UIColor(red: 0/255, green: 147/255, blue: 135/255, alpha: 1)
     let buttonRed = UIColor(red: 153/255, green: 29/255, blue: 50/255, alpha: 1)
@@ -41,7 +57,9 @@ class ViewController: UIViewController {
 //        loadGameStartSound()
 //        // Start game
 //        playGameStartSound()
-        displayQuestion()
+        hideAll()
+        displayModeSelector()
+        popupView.layer.cornerRadius = 10
     }
 
     override func didReceiveMemoryWarning() {
@@ -57,17 +75,28 @@ class ViewController: UIViewController {
 
     }
     
+    // Function to display the question
     func getQuestion() {
+        // Reset button function
+        buttonFunctionState(sender1: option1Button, sender2: option2Button, sender3: option3Button, sender4: option4Button, function: true)
+        
         // Making sure button backgrounds are normal
         resetButtonBackground(sender1: option1Button, sender2: option2Button, sender3: option3Button, sender4: option4Button)
         
         // Reset the Next Question Button
         nextQuestionButton.setTitle("Next Question", for: .normal)
         
-        // Hide the results label
-        resultsLabel.isHidden = true
+        // show the question and results label
+        questionField.text = ""
+        resultsLabel.text = ""
+        questionField.isHidden = false
+        resultsLabel.isHidden = false
         // Make sure options are visible
         showState(sender1: option1Button, sender2: option2Button, sender3: option3Button, sender4: option4Button, state: false)
+        // Check to see if need to run timer
+        if lightningModeSelected == true {
+            runTimer()
+        }
         // Get the initial random number
         indexOfSelectedQuestion = GKRandomSource.sharedRandom().nextInt(upperBound: quizQuestions.trivia.count)
         // Loop to make sure we don't use this same number
@@ -86,8 +115,12 @@ class ViewController: UIViewController {
         option4Button.setTitle(questionDictionary["Option4"], for: .normal)
         nextQuestionButton.isHidden = true
         
+        // Increment the questions asked counter
+        questionsAsked += 1
     }
     
+    
+    // End of game function to display score
     func displayScore() {
         // Hide the answer buttons
         showState(sender1: option1Button, sender2: option2Button, sender3: option3Button, sender4: option4Button, state: true)
@@ -99,15 +132,19 @@ class ViewController: UIViewController {
         indexOfQuestionsAsked.removeAll()
         questionsAsked = 0
         correctQuestions = 0
+        gameModeSelected = false
+        lightningModeSelected = false
         
         nextQuestionButton.setTitle("Play Again", for: .normal)
     }
+    
     
     // Func to change the button appearance when it's not selected
     func changeBackgroundFor(notSender: UIButton) {
         notSender.alpha = 0.3
         notSender.tintColor = UIColor.lightText
     }
+    
     
     // Show or hide the buttons
     func showState(sender1: UIButton, sender2: UIButton, sender3: UIButton, sender4: UIButton, state: Bool) {
@@ -117,6 +154,7 @@ class ViewController: UIViewController {
         sender4.isHidden = state
     }
     
+    // Function to make buttons normal again
     func resetButtonBackground(sender1: UIButton, sender2: UIButton, sender3: UIButton, sender4: UIButton) {
         sender1.backgroundColor = buttonBlue
         sender1.tintColor = UIColor.white
@@ -133,7 +171,34 @@ class ViewController: UIViewController {
     }
     
     
+    // Function to control the timer
+    func updateTimer() {
+        resultsLabel.text = "\(seconds)" // Displaying the seconds
+        seconds -= 1  // To count down the seconds
+        if seconds == -1 {
+            timer.invalidate()
+            buttonFunctionState(sender1: option1Button, sender2: option2Button, sender3: option3Button, sender4: option4Button, function: false)
+            resultsLabel.text = "Out of time"
+            nextQuestionButton.isHidden = false
+        }
+    }
     
+    
+    // Function to format the timer
+    func runTimer() {
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: (#selector(ViewController.updateTimer)), userInfo: nil, repeats: true)
+        seconds = 15
+    }
+    
+    
+    // Function to present the mode selector
+    func displayModeSelector() {
+        if gameModeSelected == false {
+            selectModePopupConstraint.constant = 0
+        }
+        popupBlurEffect.alpha = 0.55
+        UIView.animate(withDuration: 0.3, animations: {self.view.layoutIfNeeded()})
+    }
     
     
     
@@ -142,6 +207,8 @@ class ViewController: UIViewController {
         if questionsAsked == questionsPerRound {
             // Game is over
             displayScore()
+        } else if gameModeSelected == false {
+            displayModeSelector()
         } else {
             // Continue game
             displayQuestion()
@@ -149,7 +216,24 @@ class ViewController: UIViewController {
     }
     
     
+    func hideAll() {
+        questionField.isHidden = true
+        resultsLabel.isHidden = true
+        resultsLabel.text = ""
+        option1Button.isHidden = true
+        option2Button.isHidden = true
+        option3Button.isHidden = true
+        option4Button.isHidden = true
+        nextQuestionButton.isHidden = true
+    }
     
+    
+    func buttonFunctionState(sender1: UIButton, sender2: UIButton, sender3: UIButton, sender4: UIButton, function: Bool) {
+        sender1.isEnabled = function
+        sender2.isEnabled = function
+        sender3.isEnabled = function
+        sender4.isEnabled = function
+    }
     
     
     
@@ -158,10 +242,8 @@ class ViewController: UIViewController {
         nextRound()
     }
     
-    
+    // Func to check the answer 
     @IBAction func checkAnswer(_ sender: UIButton) {
-        // Increment the questions asked counter
-        questionsAsked += 1
         
         let selectedQuestionDict = quizQuestions.trivia[indexOfSelectedQuestion]
         let correctAnswer = selectedQuestionDict["Answer"]
@@ -189,8 +271,31 @@ class ViewController: UIViewController {
             changeBackgroundFor(notSender: option4Button)
         }
         nextQuestionButton.isHidden = false
+        timer.invalidate()
     }
     
+    // Action for Lightning mode
+    @IBAction func lightningModeButtonPressed(_ sender: Any) {
+        selectModePopupConstraint.constant = -300
+        gameModeSelected = true
+        
+        UIView.animate(withDuration: 0.1, animations: {self.view.layoutIfNeeded()})
+        lightningModeSelected = true
+        getQuestion()
+        
+        popupBlurEffect.alpha = 0
+    }
+    
+    // Action for Normal mode
+    @IBAction func normalModeButtonPressed(_ sender: Any) {
+        selectModePopupConstraint.constant = -300
+        popupBlurEffect.alpha = 0
+        gameModeSelected = true
+        UIView.animate(withDuration: 0.1, animations: {self.view.layoutIfNeeded()})
+        getQuestion()
+        
+        popupBlurEffect.alpha = 0
+    }
 
     
     // MARK: Helper Methods
