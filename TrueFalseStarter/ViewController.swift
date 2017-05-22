@@ -196,8 +196,10 @@ class ViewController: UIViewController {
         if gameModeSelected == false {
             selectModePopupConstraint.constant = 0
         }
-        popupBlurEffect.alpha = 0.55
-        UIView.animate(withDuration: 0.3, animations: {self.view.layoutIfNeeded()})
+        
+        UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: .curveEaseOut, animations: {self.view.layoutIfNeeded()}, completion: nil)
+        
+        UIView.animate(withDuration: 0.1, animations: {self.popupBlurEffect.alpha = 0.55})
     }
     
     
